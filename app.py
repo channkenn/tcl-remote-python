@@ -1,14 +1,22 @@
 from flask import Flask, render_template, request, jsonify
 import subprocess
 import os
+import platform  # 追加：OS判別用
 
 app = Flask(__name__)
 
 # --- 設定項目 ---
 TV_IP = "192.168.10.102"
-# adb.exeのフルパスを直接指定
-ADB_PATH = r"C:\pg\platform-tools\adb.exe"
 
+# OSを判別してADBのパスを自動切り替え
+if platform.system() == "Windows":
+    # Windows（PC）環境
+    ADB_PATH = r"C:\pg\platform-tools\adb.exe"
+else:
+    # Termux (Android/Linux) 環境
+    ADB_PATH = "adb"
+
+# --- 以下、send_adb_command などの関数は変更なし ---
 def send_adb_command(key_code):
     try:
         # 1. 接続を確認
