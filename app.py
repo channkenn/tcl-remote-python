@@ -1,0 +1,65 @@
+from flask import Flask, render_template, request, jsonify
+import subprocess
+import os
+
+app = Flask(__name__)
+
+# --- 設定項目 ---
+TV_IP = "192.168.10.102"
+# adb.exeのフルパスを直接指定
+ADB_PATH = r"C:\pg\platform-tools\adb.exe"
+
+def send_adb_command(key_code):
+    try:
+        # 1. 接続を確認
+        subprocess.run([ADB_PATH, "connect", f"{TV_IP}:5555"], capture_output=True)
+        # 2. キーイベントを送信
+        subprocess.run([ADB_PATH, "shell", "input", "keyevent", str(key_code)], capture_output=True)
+        return True
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
+
+def launch_app(package_name):
+    """パッケージ名を指定してアプリを起動する"""
+    try:
+        subprocess.run([ADB_PATH, "connect", f"{TV_IP}:5555"], capture_output=True)
+        
+        if "amazonvideo" in package_name:
+            # Prime Videoはam startコマンドの方が確実
+            cmd = [ADB_PATH, "shell", "am", "start", "-a", "android.intent.action.VIEW", "-n", f"{package_name}/com.amazon.ignition.IgnitionActivity"]
+        else:
+            # YouTubeなどはmonkeyコマンドで起動
+            cmd = [ADB_PATH, "shell", "monkey", "-p", package_name, "-c", "android.intent.category.LAUNCHER", "1"]
+        
+        subprocess.run(cmd, capture_output=True)
+        return True
+    except Exception as e:
+        print(f"Error launching app: {e}")
+        return False
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/send_key/<int:key_code>')
+def send_key(key_code):
+    print(f"Sending Key: {key_code}")
+    success = send_adb_command(key_code)
+    return jsonify({"success": success})
+
+@app.route('/launch/<app_name>')
+def launch(app_name):
+    packages = {
+        "youtube": "com.google.android.youtube.tv",
+        "prime_video": "com.amazon.amazonvideo.livingroom"
+    }
+    pkg = packages.get(app_name)
+    if pkg:
+        success = launch_app(pkg)
+        return jsonify({"success": success})
+    return jsonify({"success": False}), 404
+
+if __name__ == '__main__':
+    # Flaskサーバーを起動
+    app.run(debug=True, host='0.0.0.0', port=5000)

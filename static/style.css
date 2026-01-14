@@ -1,0 +1,101 @@
+/* 基本設定 */
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  text-align: center;
+  background: #1a1a1a;
+  color: #ffffff;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+
+h1 {
+  font-size: 1.5rem;
+  color: #ff4500;
+  margin-bottom: 20px;
+}
+
+/* グリッドレイアウト */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 350px;
+}
+
+/* ボタンの共通デザイン */
+button {
+  padding: 18px 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 12px;
+  border: none;
+  background: #333;
+  color: white;
+  box-shadow: 0 4px #000;
+  transition: all 0.05s;
+}
+
+button:active {
+  box-shadow: 0 0 #000;
+  transform: translateY(4px);
+  background: #555;
+}
+
+/* 特殊ボタンの装飾 */
+.span-2 {
+  grid-column: span 2;
+}
+.span-3 {
+  grid-column: span 3;
+}
+
+.btn-power {
+  background: #d32f2f;
+}
+.btn-home {
+  background: #455a64;
+}
+.btn-vol {
+  background: #2e7d32;
+}
+.btn-media {
+  background: #ef6c00;
+}
+.btn-utility {
+  background: #6a1b9a;
+}
+
+/* アプリボタン */
+.btn-youtube {
+  background: #ff0000;
+  margin-top: 10px;
+}
+.btn-prime {
+  background: #00a8e1;
+}
+.btn-tver {
+  background: #00838f;
+}
+
+/* セクション区切り */
+.label {
+  grid-column: span 3;
+  font-size: 0.75rem;
+  color: #666;
+  text-align: left;
+  margin-top: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #333;
+}
+
+.spacer {
+  visibility: hidden;
+  pointer-events: none;
+}

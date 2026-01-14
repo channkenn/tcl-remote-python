@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>TCL Remote Pro</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <h1>TCL Smart Remote</h1>
+
+    <div class="grid">
+      <button class="btn-power" onclick="send(26)">POWER</button>
+      <button class="btn-input" onclick="send(178)">INPUT</button>
+      <button onclick="send(164)">MUTE</button>
+
+      <div class="spacer"></div>
+      <button onclick="send(19)">UP</button>
+      <div class="spacer"></div>
+      <button onclick="send(21)">LEFT</button>
+      <button onclick="send(23)">OK</button>
+      <button onclick="send(22)">RIGHT</button>
+      <div class="spacer"></div>
+      <button onclick="send(20)">DOWN</button>
+      <div class="spacer"></div>
+
+      <button onclick="send(4)">BACK</button>
+      <button class="btn-home" onclick="send(3)">HOME</button>
+      <button onclick="send(82)">MENU</button>
+
+      <button class="btn-vol" onclick="send(24)">VOL +</button>
+      <button class="btn-media" onclick="send(85)">PAUSE</button>
+      <button class="btn-vol" onclick="send(25)">VOL -</button>
+
+      <button class="btn-media" onclick="send(88)">PREV</button>
+      <button class="btn-media" onclick="send(90)">FF</button>
+      <button class="btn-media" onclick="send(87)">NEXT</button>
+
+      <button class="span-3 btn-youtube" onclick="launch('youtube')">
+        YouTube
+      </button>
+      <button class="span-3 btn-prime" onclick="launch('prime_video')">
+        Prime Video
+      </button>
+      <button class="span-3 btn-tver" onclick="launch('tver')">TVer</button>
+    </div>
+
+    <script>
+      function send(keyCode) {
+        fetch(`/send_key/${keyCode}`);
+      }
+      function launch(appName) {
+        fetch(`/launch/${appName}`);
+      }
+    </script>
+  </body>
+</html>
