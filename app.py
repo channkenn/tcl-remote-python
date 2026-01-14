@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import subprocess
 import os
 import platform  # 追加：OS判別用
+import urllib.parse  # 冒頭に追加
 
 app = Flask(__name__)
 
@@ -17,6 +18,21 @@ else:
     ADB_PATH = "adb"
 
 # --- 以下、send_adb_command などの関数は変更なし ---
+@app.route('/send_text')
+def send_text():
+    text = request.args.get('text', '')
+    if not text:
+        return jsonify({"success": False})
+    
+    # スペースをエスケープ（ADBの仕様上、スペースは%sに変換する必要がある場合があります）
+    encoded_text = text.replace(" ", "%s")
+    
+    try:
+        # ADBでテキストを送信
+        subprocess.run([ADB_PATH, "shell", "input", "text", encoded_text], capture_output=True)
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
 def send_adb_command(key_code):
     try:
         # 1. 接続を確認

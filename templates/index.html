@@ -11,9 +11,38 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
     />
+    <style>
+      /* 入力エリアの簡易調整（style.cssに追記してもOK） */
+      .input-container {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+        max-width: 350px;
+        margin-bottom: 20px;
+      }
+      #tv_input {
+        flex: 1;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #444;
+        background: #333;
+        color: white;
+        font-size: 16px; /* iOSのズーム防止のため16px推奨 */
+      }
+      .btn-send {
+        background: #2196f3 !important;
+        box-shadow: 0 4px #1565c0 !important;
+        padding: 0 20px !important;
+      }
+    </style>
   </head>
   <body>
     <h1>TCL Smart Remote</h1>
+
+    <div class="input-container">
+      <input type="text" id="tv_input" placeholder="英数字で検索..." />
+      <button class="btn-send" onclick="sendText()">送信</button>
+    </div>
 
     <div class="grid">
       <button class="btn-power" onclick="send(26)">POWER</button>
@@ -57,6 +86,17 @@
       }
       function launch(appName) {
         fetch(`/launch/${appName}`);
+      }
+      // テキスト送信用の関数
+      function sendText() {
+        const input = document.getElementById("tv_input");
+        const text = input.value;
+        if (text) {
+          // fetchのクエリパラメータとして送信
+          fetch(`/send_text?text=${encodeURIComponent(text)}`);
+          input.value = ""; // 送信後に空にする
+          input.blur(); // キーボードを閉じる
+        }
       }
     </script>
   </body>
