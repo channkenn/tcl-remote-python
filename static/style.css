@@ -1,4 +1,6 @@
-/* 基本設定 */
+/* =========================================
+   基本設定 & レイアウト
+   ========================================= */
 body {
   font-family: "Helvetica Neue", Arial, sans-serif;
   text-align: center;
@@ -18,7 +20,6 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* グリッドレイアウト */
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -27,7 +28,36 @@ h1 {
   max-width: 350px;
 }
 
-/* ボタンの共通デザイン */
+/* =========================================
+   入力コンテナ（検索バー）
+   ========================================= */
+.input-container {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 20px;
+}
+
+#tv_input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #333;
+  color: white;
+  font-size: 16px;
+}
+
+.btn-send {
+  background: #2196f3 !important;
+  box-shadow: 0 4px #1565c0 !important;
+  padding: 0 20px !important;
+}
+
+/* =========================================
+   ボタン共通デザイン
+   ========================================= */
 button {
   padding: 18px 5px;
   font-size: 14px;
@@ -42,12 +72,11 @@ button {
 }
 
 button:active {
-  box-shadow: 0 0 #000;
+  box-shadow: 0 0 #000 !important;
   transform: translateY(4px);
-  background: #555;
+  filter: brightness(1.2);
 }
 
-/* 特殊ボタンの装飾 */
 .span-2 {
   grid-column: span 2;
 }
@@ -55,6 +84,25 @@ button:active {
   grid-column: span 3;
 }
 
+.spacer {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.label {
+  grid-column: span 3;
+  font-size: 0.75rem;
+  color: #666;
+  text-align: left;
+  margin-top: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #333;
+}
+
+/* =========================================
+   機能別カラー設定
+   ========================================= */
 .btn-power {
   background: #d32f2f;
 }
@@ -71,7 +119,7 @@ button:active {
   background: #6a1b9a;
 }
 
-/* アプリボタン */
+/* アプリ系 */
 .btn-youtube {
   background: #ff0000;
   margin-top: 10px;
@@ -83,31 +131,39 @@ button:active {
   background: #00838f;
 }
 
-/* セクション区切り */
-.label {
-  grid-column: span 3;
-  font-size: 0.75rem;
-  color: #666;
-  text-align: left;
-  margin-top: 15px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-bottom: 1px solid #333;
+/* =========================================
+   掃除マクロ（特別デザイン）
+   ========================================= */
+.btn-clean-shorts,
+.btn-clean-channels {
+  color: white !important;
+  font-size: 15px;
 }
 
-.spacer {
-  visibility: hidden;
-  pointer-events: none;
-}
-/* ショート動画掃除ボタンのデザイン */
-.btn-clean {
+/* ショート動画掃除（赤グラデーション） */
+.btn-clean-shorts {
   background: linear-gradient(135deg, #ff5252, #b71c1c) !important;
-  color: white !important;
-  margin-top: 15px;
+  margin-top: 10px;
   box-shadow: 0 4px #880e4f !important;
 }
+/* 3列並べるための特殊グリッド */
+.grid-3col {
+  grid-column: span 3;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 5px;
+}
 
-.btn-clean:active {
-  box-shadow: 0 0 #880e4f !important;
-  transform: translateY(4px);
+/* チャンネル掃除（紫グラデーション） */
+.btn-clean-channels {
+  background: linear-gradient(135deg, #7b1fa2, #4a148c) !important;
+  margin-top: 0 !important;
+  box-shadow: 0 4px #311b92 !important;
+}
+
+/* 掃除ボタン共通の押し込み効果 */
+.btn-clean-shorts:active,
+.btn-clean-channels:active {
+  box-shadow: 0 0 #000 !important;
 }

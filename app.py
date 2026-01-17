@@ -19,6 +19,51 @@ else:
     ADB_PATH = "adb"
 
 # --- 以下、send_adb_command などの関数は変更なし ---
+# 汎用的なURL起動用
+@app.route('/open_url')
+def open_url():
+    url = request.args.get('url', '')
+    if not url:
+        return jsonify({"success": False})
+    try:
+        cmd = [
+            ADB_PATH, "shell", "am", "start", "-a", "android.intent.action.VIEW",
+            "-d", url, "com.google.android.youtube.tv"
+        ]
+        subprocess.run(cmd, capture_output=True)
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+@app.route('/clean_channels/<int:count>')
+def clean_channels(count):
+    DEV = "/dev/input/event0"
+    try:
+        # JSから送られた回数分ループ
+        for i in range(count):
+            # 1. 物理長押し
+            subprocess.run([ADB_PATH, "shell", "sendevent", DEV, "1", "28", "1"])
+            subprocess.run([ADB_PATH, "shell", "sendevent", DEV, "0", "0", "0"])
+            time.sleep(1.2)
+            subprocess.run([ADB_PATH, "shell", "sendevent", DEV, "1", "28", "0"])
+            subprocess.run([ADB_PATH, "shell", "sendevent", DEV, "0", "0", "0"])
+            
+            time.sleep(0.1) 
+
+            # 2. 「チャンネルを非表示」を選択（下4回）
+            for _ in range(4):
+                subprocess.run([ADB_PATH, "shell", "input", "keyevent", "20"])
+                time.sleep(0.1)
+
+            # 3. 決定
+            for _ in range(2):
+                subprocess.run([ADB_PATH, "shell", "input", "keyevent", "66"])
+                time.sleep(0.1)
+            time.sleep(0.2)
+            
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+    
 @app.route('/clean_shorts')
 def clean_shorts():
     # デバイスパスを特定した event0 に設定
@@ -38,16 +83,16 @@ def clean_shorts():
             subprocess.run([ADB_PATH, "shell", "sendevent", DEV, "0", "0", "0"]) # 同期信号
             
             # --- メニューが出た後の操作 ---
-            time.sleep(1.0) # メニューアニメーション待ち
+            time.sleep(0.1) # メニューアニメーション待ち
 
             for _ in range(3):
                 subprocess.run([ADB_PATH, "shell", "input", "keyevent", "20"])
-                time.sleep(0.3)
+                time.sleep(0.1)
 
             # 決定（ここは通常のkeyeventでOK）
             subprocess.run([ADB_PATH, "shell", "input", "keyevent", "66"])
             
-            time.sleep(1.5) # 次の動画へのスライド待ち
+            time.sleep(0.1) # 次の動画へのスライド待ち
             
         return jsonify({"success": True})
     except Exception as e:
