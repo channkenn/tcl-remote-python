@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
@@ -12,7 +12,6 @@
       href="{{ url_for('static', filename='style.css') }}"
     />
     <style>
-      /* 入力エリアの簡易調整（style.cssに追記してもOK） */
       .input-container {
         display: flex;
         gap: 8px;
@@ -27,7 +26,7 @@
         border: 1px solid #444;
         background: #333;
         color: white;
-        font-size: 16px; /* iOSのズーム防止のため16px推奨 */
+        font-size: 16px;
       }
       .btn-send {
         background: #2196f3 !important;
@@ -40,6 +39,7 @@
     <h1>TCL Smart Remote</h1>
 
     <div class="input-container">
+      <button onclick="send(84)" class="icon-button">🔍</button>
       <input type="text" id="tv_input" placeholder="英数字で検索..." />
       <button class="btn-send" onclick="sendText()">送信</button>
     </div>
@@ -78,6 +78,10 @@
         Prime Video
       </button>
       <button class="span-3 btn-tver" onclick="launch('tver')">TVer</button>
+
+      <button class="span-3 btn-clean" onclick="cleanShorts()">
+        🔥 ショート動画を掃除
+      </button>
     </div>
 
     <script>
@@ -87,15 +91,19 @@
       function launch(appName) {
         fetch(`/launch/${appName}`);
       }
-      // テキスト送信用の関数
       function sendText() {
         const input = document.getElementById("tv_input");
         const text = input.value;
         if (text) {
-          // fetchのクエリパラメータとして送信
           fetch(`/send_text?text=${encodeURIComponent(text)}`);
-          input.value = ""; // 送信後に空にする
-          input.blur(); // キーボードを閉じる
+          input.value = "";
+          input.blur();
+        }
+      }
+      // ショート掃除マクロ呼び出し
+      function cleanShorts() {
+        if (confirm("YouTubeホームのショート動画の列を掃除しますか？")) {
+          fetch("/clean_shorts");
         }
       }
     </script>

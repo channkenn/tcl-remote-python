@@ -3,6 +3,7 @@ import subprocess
 import os
 import platform  # 追加：OS判別用
 import urllib.parse  # 冒頭に追加
+import time
 
 app = Flask(__name__)
 
@@ -18,6 +19,48 @@ else:
     ADB_PATH = "adb"
 
 # --- 以下、send_adb_command などの関数は変更なし ---
+@app.route('/clean_shorts')
+def clean_shorts():
+    # デバイスパスを特定した event0 に設定
+    DEV = "/dev/input/event0"
+    
+    try:
+        for i in range(7):  # 5回繰り返す
+            # --- 物理OKボタンの長押し再現 ---
+            # 1. DOWN (押し下げ) : 1(キー) 28(OKキー) 1(ON)
+            subprocess.run([ADB_PATH, "shell", "sendevent", DEV, "1", "28", "1"])
+            subprocess.run([ADB_PATH, "shell", "sendevent", DEV, "0", "0", "0"]) # 同期信号
+            
+            time.sleep(1.2) # ここが長押しの「長さ」になります
+            
+            # 2. UP (離す) : 1(キー) 28(OKキー) 0(OFF)
+            subprocess.run([ADB_PATH, "shell", "sendevent", DEV, "1", "28", "0"])
+            subprocess.run([ADB_PATH, "shell", "sendevent", DEV, "0", "0", "0"]) # 同期信号
+            
+            # --- メニューが出た後の操作 ---
+            time.sleep(1.0) # メニューアニメーション待ち
+
+            for _ in range(3):
+                subprocess.run([ADB_PATH, "shell", "input", "keyevent", "20"])
+                time.sleep(0.3)
+
+            # 決定（ここは通常のkeyeventでOK）
+            subprocess.run([ADB_PATH, "shell", "input", "keyevent", "66"])
+            
+            time.sleep(1.5) # 次の動画へのスライド待ち
+            
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+    
+@app.route('/open_search')
+def open_search():
+    try:
+        # キーコード 84 は Android の標準検索ボタン（KEYCODE_SEARCH）です
+        subprocess.run([ADB_PATH, "shell", "input", "keyevent", "84"], capture_output=True)
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
 @app.route('/send_text')
 def send_text():
     text = request.args.get('text', '')

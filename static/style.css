@@ -99,3 +99,15 @@ button:active {
   visibility: hidden;
   pointer-events: none;
 }
+/* ショート動画掃除ボタンのデザイン */
+.btn-clean {
+  background: linear-gradient(135deg, #ff5252, #b71c1c) !important;
+  color: white !important;
+  margin-top: 15px;
+  box-shadow: 0 4px #880e4f !important;
+}
+
+.btn-clean:active {
+  box-shadow: 0 0 #880e4f !important;
+  transform: translateY(4px);
+}
