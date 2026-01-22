@@ -34,6 +34,33 @@ def open_url():
         return jsonify({"success": True})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
+@app.route('/delete_history/<int:count>')
+def delete_history(count):
+    DEV = "/dev/input/event0"
+    try:
+        for i in range(count):
+            # 1. 決定ボタン長押し（メニュー表示）
+            subprocess.run([ADB_PATH, "shell", "sendevent", DEV, "1", "28", "1"])
+            subprocess.run([ADB_PATH, "shell", "sendevent", DEV, "0", "0", "0"])
+            time.sleep(1.2) # 長押しの判定待ち
+            subprocess.run([ADB_PATH, "shell", "sendevent", DEV, "1", "28", "0"])
+            subprocess.run([ADB_PATH, "shell", "sendevent", DEV, "0", "0", "0"])
+            
+            time.sleep(0.5) # メニューが出るのを待つ
+
+            # 2. 「履歴から削除」を選択（下1回）
+            subprocess.run([ADB_PATH, "shell", "input", "keyevent", "20"])
+            time.sleep(0.2)
+
+            # 3. 決定
+            subprocess.run([ADB_PATH, "shell", "input", "keyevent", "66"])
+            
+            # 連続で消す場合、次の動画にフォーカスが移るのを待つ
+            time.sleep(0.8)
+            
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
 @app.route('/clean_channels/<int:count>')
 def clean_channels(count):
     DEV = "/dev/input/event0"

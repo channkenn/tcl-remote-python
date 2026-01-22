@@ -15,7 +15,9 @@ function sendText() {
     input.blur();
   }
 }
-
+function deleteHistory(count) {
+  fetch(`/delete_history/${count}`);
+}
 // 回数指定付きのチャンネル掃除
 function cleanChannels(count) {
   fetch(`/clean_channels/${count}`);

@@ -28,31 +28,13 @@ h1 {
   max-width: 350px;
 }
 
-/* =========================================
-   入力コンテナ（検索バー）
-   ========================================= */
-.input-container {
-  display: flex;
+/* 3列並べるための特殊グリッド（知育・掃除用） */
+.grid-3col {
+  grid-column: span 3;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  width: 100%;
-  max-width: 350px;
-  margin-bottom: 20px;
-}
-
-#tv_input {
-  flex: 1;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #444;
-  background: #333;
-  color: white;
-  font-size: 16px;
-}
-
-.btn-send {
-  background: #2196f3 !important;
-  box-shadow: 0 4px #1565c0 !important;
-  padding: 0 20px !important;
+  margin-top: 5px;
 }
 
 /* =========================================
@@ -77,18 +59,6 @@ button:active {
   filter: brightness(1.2);
 }
 
-.span-2 {
-  grid-column: span 2;
-}
-.span-3 {
-  grid-column: span 3;
-}
-
-.spacer {
-  visibility: hidden;
-  pointer-events: none;
-}
-
 .label {
   grid-column: span 3;
   font-size: 0.75rem;
@@ -101,69 +71,52 @@ button:active {
 }
 
 /* =========================================
-   機能別カラー設定
+   知育ボタン (Kids Safe Zone)
    ========================================= */
-.btn-power {
-  background: #d32f2f;
+.btn-edu {
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-size: 15px;
+}
+
+/* =========================================
+   掃除・履歴系（特別デザイン）
+   ========================================= */
+
+/* 1. ショート動画掃除（鮮やかな赤） */
+.btn-clean-shorts {
+  background: linear-gradient(135deg, #ff5252, #b71c1c) !important;
+  box-shadow: 0 4px #880e4f !important;
+}
+
+/* 2. チャンネル非表示（紫グラデーション） */
+.btn-clean-channels {
+  background: linear-gradient(135deg, #7b1fa2, #4a148c) !important;
+  box-shadow: 0 4px #311b92 !important;
+}
+
+/* 3. 履歴から削除（深いワインレッド・警告色） */
+.btn-clean-history {
+  background: linear-gradient(135deg, #880e4f, #4a0007) !important;
+  box-shadow: 0 4px #2c0003 !important;
+}
+
+/* =========================================
+   基本操作・アプリ系
+   ========================================= */
+.btn-utility {
+  background: #6a1b9a;
 }
 .btn-home {
   background: #455a64;
 }
-.btn-vol {
-  background: #2e7d32;
-}
-.btn-media {
-  background: #ef6c00;
-}
-.btn-utility {
-  background: #6a1b9a;
-}
-
-/* アプリ系 */
 .btn-youtube {
   background: #ff0000;
-  margin-top: 10px;
-}
-.btn-prime {
-  background: #00a8e1;
-}
-.btn-tver {
-  background: #00838f;
 }
 
-/* =========================================
-   掃除マクロ（特別デザイン）
-   ========================================= */
-.btn-clean-shorts,
-.btn-clean-channels {
-  color: white !important;
-  font-size: 15px;
+.span-2 {
+  grid-column: span 2;
 }
-
-/* ショート動画掃除（赤グラデーション） */
-.btn-clean-shorts {
-  background: linear-gradient(135deg, #ff5252, #b71c1c) !important;
-  margin-top: 10px;
-  box-shadow: 0 4px #880e4f !important;
-}
-/* 3列並べるための特殊グリッド */
-.grid-3col {
+.span-3 {
   grid-column: span 3;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-top: 5px;
-}
-
-/* チャンネル掃除（紫グラデーション） */
-.btn-clean-channels {
-  background: linear-gradient(135deg, #7b1fa2, #4a148c) !important;
-  margin-top: 0 !important;
-  box-shadow: 0 4px #311b92 !important;
-}
-
-/* 掃除ボタン共通の押し込み効果 */
-.btn-clean-shorts:active,
-.btn-clean-channels:active {
-  box-shadow: 0 0 #000 !important;
 }
